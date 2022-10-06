@@ -18,10 +18,16 @@ function renderTasks(tasks) {
     tasks.forEach((task) => {
 
         const tableRow = document.createElement('tr');
+        const deletebutton = document.createElement("button");
+
+        deletebutton.innerText ="Delete"
+
+        deletebutton.addEventListener("click", () => deleteTask(task.id));
 
         tableRow.append(createCell(task.id), createCell(task.title), createCell(task.completed));
 
         tableBody.appendChild(tableRow);
+        tableRow.appendChild(deletebutton)
 
     });
 
@@ -39,6 +45,13 @@ function indexTask() {
 
 }
 
+function deleteTask(id){
+    fetch(`http://localhost:3000/task/${id}`, {
+        method: 'DELETE'
+    });
+
+    location.reload()
+};
 
 
 function createTask() {
@@ -66,14 +79,10 @@ function createTask() {
     })
 };
 
-
-
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("submit");
 
     indexTask();
 
     form.addEventListener("submit", createTask);
-
-    
 });
