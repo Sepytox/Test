@@ -25,7 +25,6 @@ function renderTasks(tasks) {
         deletebutton.addEventListener("click", () => deleteTask(task.id));
 
         tableRow.append(createCell(task.id), createCell(task.title), createCell(task.completed));
-
         tableBody.appendChild(tableRow);
         tableRow.appendChild(deletebutton)
 
