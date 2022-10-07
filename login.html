@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        label {
+            display: block;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            checkLoggedIn();
+
+            document.getElementById("login").addEventListener("submit", (event) => {
+                event.preventDefault();
+
+                const email = document.getElementById("email_input").value
+                const password = document.getElementById("password_input").value
+                const login = { email: email, password: password }
+
+                alert(JSON.stringify(login))
+                fetch("http://127.0.0.1:3000/auth/cookie/login", {
+                    method: `POST`,
+                    credentials: "include",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(login)
+                }).then(() => checkLoggedIn())
+            })
+        })
+
+        function checkLoggedIn() {
+            const elementWhenLoggedIn = document.getElementById("loggedIn")
+            const elementWhenNotLoggedIn = document.getElementById("notLoggedIn")
+            fetch(`http://127.0.0.1:3000/auth/cookie/status`, {
+                credentials: "include"
+            }).then(function (response) {
+                if (response.status === 200) {      
+                     elementWhenLoggedIn.classList.remove("hidden")
+                    elementWhenNotLoggedIn.classList.add("hidden")
+                } else {
+                    elementWhenLoggedIn.classList.add("hidden")
+                    elementWhenNotLoggedIn.classList.remove("hidden")
+             
+                }
+            })
+        }
+
+
+    </script>
+</head>
+
+<body>
+    <a href="index.html">Home</a>
+    <h2>Login</h2>
+    <div id="loggedIn" class="hidden">
+        <p>Sie sind eingeloggt!</p>
+    </div>
+    <div id="notLoggedIn" class="hidden">
+        <form id="login">
+            <div>
+                <label for="email_input">Email</label>
+                <input type="email" name="email" id="email_input">
+            </div>
+            <div>
+                <label for="password_input">Passwort</label>
+                <input type="password" name="password" id="password_input">
+    
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+
+</html>

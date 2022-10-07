@@ -19,24 +19,68 @@ function renderTasks(tasks) {
 
         const tableRow = document.createElement('tr');
         const deletebutton = document.createElement("button");
+        const editbutton = document.createElement("button");
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox"
+
+        editbutton.innerText = "Edit"
 
         deletebutton.innerText ="Delete"
 
         deletebutton.addEventListener("click", () => deleteTask(task.id));
+        editbutton.addEventListener("click", () => editTask(task.id));
+        checkbox.addEventListener("click", () => completed(task.id));
 
-        tableRow.append(createCell(task.id), createCell(task.title), createCell(task.completed));
+        tableRow.append(createCell(task.id), createCell(task.title), checkbox);
+        
         tableBody.appendChild(tableRow);
-        tableRow.appendChild(deletebutton)
+        tableRow.appendChild(deletebutton);
+        tableRow.appendChild(editbutton);
 
     });
 
 }
 
+function completed(id) {
+    fetch(`http://127.0.0.1:3000/auth/cookie/tasks`, {
+        method: 'PUT',
+
+        credentials: 'include',
+
+        headers: {
+            'Content-Type':'application/json'
+        },
+
+        body: JSON.stringify({id: id, completed: true})
+    });
+}
+
+function editTask(id) {
+    const newTitle = prompt("Edit Task");
+    
+    fetch(`http://127.0.0.1:3000/auth/cookie/tasks`, {
+
+        method: 'PUT',
+
+        credentials: 'include',
+
+        headers: {
+            'Content-Type':'application/json'
+        },
+
+        body: JSON.stringify({id: id, title: newTitle})
+    });
+
+    location.reload();
+};
 
 
 function indexTask() {
 
-    fetch("http://localhost:3000/tasks")
+    fetch("http://127.0.0.1:3000/auth/cookie/tasks", {
+        
+        credentials: 'include'
+    })
 
     .then((response) => response.json())
 
@@ -45,8 +89,11 @@ function indexTask() {
 }
 
 function deleteTask(id){
-    fetch(`http://localhost:3000/task/${id}`, {
-        method: 'DELETE'
+    fetch(`http://127.0.0.1:3000/auth/cookie/task/${id}`, {
+        
+        method: 'DELETE',
+
+        credentials: 'include'
     });
 
     location.reload()
@@ -57,11 +104,13 @@ function createTask() {
     const UserInput = document.getElementById("UserInput")
     const task = {title: UserInput.value}
 
-    fetch("http://localhost:3000/tasks", {
+    fetch("http://127.0.0.1:3000/auth/cookie/tasks", {
 
-    method: 'POST',
+        method: 'POST',
 
-    headers: {
+        credentials: 'include',
+
+        headers: {
 
         'Content-Type':'application/json'
 
