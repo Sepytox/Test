@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <style>
         label {
             display: block;
@@ -41,12 +42,15 @@
         function checkLoggedIn() {
             const elementWhenLoggedIn = document.getElementById("loggedIn")
             const elementWhenNotLoggedIn = document.getElementById("notLoggedIn")
+            const loginscreen = document.getElementById("loginscreen")
             fetch(`http://127.0.0.1:3000/auth/cookie/status`, {
                 credentials: "include"
             }).then(function (response) {
                 if (response.status === 200) {      
-                     elementWhenLoggedIn.classList.remove("hidden")
+                    elementWhenLoggedIn.classList.remove("hidden")
                     elementWhenNotLoggedIn.classList.add("hidden")
+                    loginscreen.classList.add("hidden")
+
                 } else {
                     elementWhenLoggedIn.classList.add("hidden")
                     elementWhenNotLoggedIn.classList.remove("hidden")
@@ -60,24 +64,37 @@
 </head>
 
 <body>
-    <a href="index.html">Home</a>
-    <h2>Login</h2>
+    <div class="p-3 mb-2 bg-primary text-white"></div>
+    <nav class="navbar navbar-expand-lg bg-light">
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="login.html">Login</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <hr>
+    <h1 id="loginscreen">Login</h1>
     <div id="loggedIn" class="hidden">
-        <p>Sie sind eingeloggt!</p>
+        <p class="text-success   text-xl-start">Sie sind eingeloggt!</p>
     </div>
     <div id="notLoggedIn" class="hidden">
         <form id="login">
-            <div>
-                <label for="email_input">Email</label>
-                <input type="email" name="email" id="email_input">
+            <div class="mb-3">
+              <label for="email_input" class="form-label">Email address</label>
+              <input type="email" class="form-control" id="email_input" aria-describedby="emailHelp">
             </div>
-            <div>
-                <label for="password_input">Passwort</label>
-                <input type="password" name="password" id="password_input">
-    
+            <div class="mb-3">
+              <label for="password_input" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password_input">
             </div>
-            <button type="submit">Login</button>
-        </form>
+            <button type="submit" class="btn btn-primary">Login</button>
+          </form>
     </div>
 </body>
 
